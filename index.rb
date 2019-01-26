@@ -1,5 +1,5 @@
 require 'roo'
-require_relative 'methods.rb'
+require_relative 'methods'
 
 if (Gem.win_platform?)
   Encoding.default_external = Encoding.find(Encoding.locale_charmap)
@@ -10,14 +10,12 @@ if (Gem.win_platform?)
   end
 end
 
-
 excel = Roo::Spreadsheet.open './EngRus.xlsx'
 worksheets = excel.sheets
 
 english_words = []
 russian_words = []
 answers = []
-
 
 excel.each_with_pagename do |_name, sheet|
 
@@ -42,6 +40,7 @@ worksheets.each do |worksheet|
 
   puts "Найдено слов: #{num_rows - 1}"
 end
+
 puts "Сколько слов повторяем?"
 how_many_words = STDIN.gets.chomp.to_i
 
