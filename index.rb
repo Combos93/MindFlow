@@ -1,5 +1,5 @@
 require 'roo'
-require_relative 'methods'
+require_relative 'lib/methods'
 
 if (Gem.win_platform?)
   Encoding.default_external = Encoding.find(Encoding.locale_charmap)
@@ -9,8 +9,8 @@ if (Gem.win_platform?)
     io.set_encoding(Encoding.default_external, Encoding.default_internal)
   end
 end
-
-excel = Roo::Spreadsheet.open './EngRus.xlsx'
+# "#{__dir__}/data/info.xml"
+excel = Roo::Spreadsheet.open "#{__dir__}/data/EngRus.xlsx"
 worksheets = excel.sheets
 
 english_words = []
@@ -30,7 +30,7 @@ worksheets.each do |worksheet|
   num_rows = 0
 
   excel.sheet(worksheet).each_row_streaming do |row|
-    row.map { |cell| cell.value }
+    row.map {|cell| cell.value}
     num_rows += 1
 
     if row == []
@@ -67,7 +67,7 @@ while counter <= how_many_words
 
   puts
   # случайный русский набор ответов перемешаем и уберём дубликаты
-   sample_russian_set.shuffle!.uniq
+  sample_russian_set.shuffle!.uniq
   puts
 
   # случайный русский набор ответов после uniq`a НЕ РАВЕН выбранному количеству ответов (вдруг!)
@@ -78,7 +78,10 @@ while counter <= how_many_words
   end
   sample_russian_set.shuffle!
   answers = sample_russian_set ###################
-puts answers
+
+  answers.each.with_index(1) do |word, index|
+    puts "#{index}: #{word}"
+  end
 
   puts "Вариант ответа: (пишем полностью)"
   our_answer = STDIN.gets.chomp.to_s
