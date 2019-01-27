@@ -9,13 +9,12 @@ if (Gem.win_platform?)
     io.set_encoding(Encoding.default_external, Encoding.default_internal)
   end
 end
-# "#{__dir__}/data/info.xml"
-excel = Roo::Spreadsheet.open "#{__dir__}/data/EngRus.xlsx"
-worksheets = excel.sheets
 
 english_words = []
 russian_words = []
-answers = []
+
+excel = Roo::Spreadsheet.open "#{__dir__}/data/EngRus.xlsx"
+worksheets = excel.sheets
 
 excel.each_with_pagename do |_name, sheet|
 
@@ -30,7 +29,7 @@ worksheets.each do |worksheet|
   num_rows = 0
 
   excel.sheet(worksheet).each_row_streaming do |row|
-    row.map {|cell| cell.value}
+    row.map { |cell| cell.value }
     num_rows += 1
 
     if row == []
@@ -68,18 +67,19 @@ while counter <= how_many_words
   puts
   # случайный русский набор ответов перемешаем и уберём дубликаты
   sample_russian_set.shuffle!.uniq
-  puts
 
   # случайный русский набор ответов после uniq`a НЕ РАВЕН выбранному количеству ответов (вдруг!)
   # то берём случайное русское слово и добавляем в набор
-  if sample_russian_set.length != (how_many_answers - 1)
-    sample_russian_set << russian_words.sample
-    answers << sample_russian_set
-  end
-  sample_russian_set.shuffle!
-  answers = sample_russian_set ###################
 
-  answers.each.with_index(1) do |word, index|
+  # if sample_russian_set.length != (how_many_answers - 1)  ######### НЕ РАБОТАЕТ!!!
+  #   sample_russian_set << russian_words.sample
+  #   answers << sample_russian_set
+  # end
+
+  sample_russian_set.shuffle!
+  # answers = sample_russian_set ###################
+
+  sample_russian_set.each.with_index(1) do |word, index|
     puts "#{index}: #{word}"
   end
 
@@ -87,7 +87,7 @@ while counter <= how_many_words
   our_answer = STDIN.gets.chomp.to_s
   puts
 
-  if answers.include?(our_answer)
+  if sample_russian_set.include?(our_answer)
     puts "Правильный ответ! =)"
   else
     puts "Не правильный ответ! =/"
