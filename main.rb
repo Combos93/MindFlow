@@ -70,15 +70,16 @@ score = 0
 
 counter = 1
 while counter <= how_many_words
-  sample_eng_word = english_words.sample # выбрать случайное английское слово; одно!; написать игроку
-  puts "Слово: #{sample_eng_word}"
+  sample_eng_word = english_words.sample # выбрать случайное английское слово; одно!;
+  puts "Слово: #{sample_eng_word}" # написать его игроку
 
   index_sample_eng_word = english_words.index(sample_eng_word) + 2 # номер индекса случайного английского слова
 
   sample_russian_set = russian_words.sample(how_many_answers) # случайный русский набор ответов: русский набор слов(выбранное количество ответов - 1)
+
   right_answer = russian_words[index_sample_eng_word - 2] # случайный русский набор ответов << добавим
 
-  sample_russian_set << right_answer # сюда верное англ. слово; по индексу, конечно, = англискому индексу.
+  sample_russian_set << right_answer # сюда верное англ. слово; по индексу, конечно, = английскому индексу.
 
   sample_russian_set.each { |word| word.downcase! }
   sample_russian_set.shuffle!.uniq! # случайный русский набор ответов перемешаем и уберём дубликаты
@@ -115,11 +116,6 @@ while counter <= how_many_words
   else
     puts "Не правильный ответ! =/ Правильный ответ \"#{right_answer}\"\n\n-----"
   end
-
-  # Слово, которое уже было - выкидываем. Не повторяемся! =)
-  # ОДНАКО НАД ЭТИМ ПОДУМАТЬ, КАК НАД ОПЦИОНАЛЬНОМ ФУНКЦИЕЙ
-  # НЕ РАБОТАЕТ!!! ЛОМАЕТ ВСЁ!!! TESTING...................................
-  #  english_words.delete_at(english_words.index(sample_eng_word))
 
   counter += 1
 end
