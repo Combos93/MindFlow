@@ -8,15 +8,15 @@ class Conjecture
     @how_many_answers = how_many_answers
 
     @right = 0 # Временно тут...
-    @current_question = 0
+    @current_word = 0
+  end
+
+  def finished?
+    @current_word >= @how_many_words
   end
 
   def sample_english_word
     @sample_eng_word = @english.sample
-  end
-
-  def sample_russian_word
-    @russian.sample
   end
 
   def index_sample_eng_word
@@ -27,18 +27,13 @@ class Conjecture
     @sample_russian_set = @russian.sample(@how_many_answers)
   end
 
-  def add_right_answer
-    @sample_russian_set << @right_answer
-  end
-
   def right_answer
     @right_answer = @russian[@index_sample_eng_word - 2]
   end
 
-  def finished?
-    @current_question >= @how_many_words
+  def add_right_answer
+    @sample_russian_set << @right_answer
   end
-
   def downcase
     @sample_russian_set.each {|word| word.downcase!}
   end
@@ -47,12 +42,16 @@ class Conjecture
     @sample_russian_set.shuffle!.uniq!
   end
 
-  def sample_rus_uniq
-    @sample_russian_set.uniq!
-  end
-
   def check_uniq_set?
     @sample_russian_set.size == (@how_many_answers + 1)
+  end
+
+  def sample_russian_word
+    @russian.sample
+  end
+
+  def sample_rus_uniq
+    @sample_russian_set.uniq!
   end
 
   def show_variants
@@ -76,7 +75,7 @@ class Conjecture
       @answer = "Не правильный ответ! =/ Правильный ответ \"#{@right_answer}\"\n\n-----"
     end
 
-    @current_question += 1
+    @current_word += 1
   end
 
   def check_answer?(our_answer)

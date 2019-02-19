@@ -8,51 +8,34 @@ if (Gem.win_platform?)
 end
 
 require_relative 'lib/parser'
-require_relative 'lib/input_info'
 require_relative 'lib/conjecture'
 
-FILE_PATH = "#{__dir__}/data/EngRus.xlsx"
+print "Найдены вот такие файлы с данными. \nКакой Вы хотите открыть?\n\n"
 
-# english_words = []
-# russian_words = []
+data = Dir.glob("#{__dir__}/data/*").sort!
+data.push("Google Таблицы")
 
-parser = Parser.new(FILE_PATH)
-# puts parser.number_words
-# puts parser.eng.inspect
+data.each.with_index(1) do |file_path, index|
+  file_name = File.basename(file_path)
+  puts "#{index}) #{file_name}"
+end
+
+choice = STDIN.gets.to_i - 1
+
+if data[choice].include?("Google Таблицы")
+  print "Пожалуйста, вставьте сюда url Вашей таблицы!\n\n"
+  url = STDIN.gets.to_s
+  parser = Parser.new(url)
+else
+  parser = Parser.new(data[choice])
+end
+
+
+
 english_words = parser.english
 russian_words = parser.russian
-# excel = Roo::Spreadsheet.open(FILE_PATH)
-# worksheets = excel.sheets
-#
-# excel.each_with_pagename do |_name, sheet|
-#
-#   english_words = sheet.column(1) # парсинг eng
-#   russian_words = sheet.column(2) # парсинг rus
-#
-#   english_words.each { |english| english.downcase! } # Приводим к нижнему регистру и Eng,
-#   russian_words.each { |russian| russian.downcase! } # и Rus
-#
-#   russian_words.delete_at(HEADER_ROW)
-#   english_words.delete_at(HEADER_ROW)
-# end
-#
-# worksheets.each do |worksheet|
-#   num_rows = 0
-#
-#   excel.sheet(worksheet).each_row_streaming do |row|
-#     row.map { |cell| cell.value }
-#     num_rows += 1
-#
-#     if row == []
-#       break
-#     end
-#   end
-# end
 
 puts "#{parser.number_words}"
-
-# russian = InputInfo.new(russian_words) # NEED THE FIIIXXXXXXXXXXXXXXXXXX!!!!!!!
-# english = InputInfo.new(english_words)
 
 puts "Сколько слов повторяем?"
 how_many_words = STDIN.gets.chomp.to_i
@@ -64,21 +47,25 @@ update_brain = Conjecture.new(english_words, russian_words,
                               how_many_words, how_many_answers)
 
 until update_brain.finished?
-  update_brain.sample_english_word # выбрать случайное английское слово; одно!;
+  # выбрать случайное английское слово; одно!
+  update_brain.sample_english_word
 
-  puts "Слово: #{update_brain.sample_eng_word}" # написать его игроку
+  # и написать его игроку
+  puts "Слово: #{update_brain.sample_eng_word}"
 
-  update_brain.index_sample_eng_word # номер индекса случайного английского слова
+  # номер индекса случайного английского слова
+  update_brain.index_sample_eng_word
 
-  update_brain.sample_russian_set # случайный русский набор ответов: русский набор слов(выбранное количество ответов
-  # - 1)
+  # случайный русский набор ответов: русский набор слов(выбранное количество ответов - 1)
+  update_brain.sample_russian_set
 
-  update_brain.right_answer # случайный русский набор ответов << добавим
-
+  # случайный русский набор ответов << добавим
+  update_brain.right_answer
   update_brain.add_right_answer
-
   update_brain.downcase
-  update_brain.shuffle_uniq # случайный русский набор ответов перемешаем и уберём дубликаты
+
+  # случайный русский набор ответов перемешаем и уберём дубликаты
+  update_brain.shuffle_uniq
 
   puts
 
@@ -91,13 +78,13 @@ until update_brain.finished?
   update_brain.show_variants
 
   puts "Вариант ответа: (можно один вариант перевода)"
-  our_answer = STDIN.gets.chomp.to_s
+  our_answer = STDIN.gets.chomp.to_s.downcase
   puts
 
   while update_brain.empty_answer?(our_answer)
     puts 'Вы не ввели вариант ответа!!!'
     puts 'Пожалуйста, напишите Ваше вариант ответа: (можно один вариант перевода)'
-    our_answer = STDIN.gets.chomp.to_s
+    our_answer = STDIN.gets.chomp.to_s.downcase
     puts
   end
 
@@ -108,7 +95,7 @@ until update_brain.finished?
 end
 
 if update_brain.right == how_many_words
-  puts "Все ваши ответы - верны."
+  puts "Все ваши ответы - верны. \n\nСлов было загадано - #{how_many_words}."
 else
   puts "У вас #{update_brain.right} правильных ответов из #{how_many_words}"
 end

@@ -1,86 +1,113 @@
 require 'roo' # https://github.com/roo-rb/roo
 require 'roo-xls' # https://github.com/roo-rb/roo-xls
+require 'roo-google' # https://github.com/roo-rb/roo-google
 
 class Parser
-  HEADER_ROW = 0
+  FIRST_IN_ARRAY = 0
+  HEADER_ROW = 1
 
   attr_reader :num_rows, :english, :russian
 
   def initialize(path_to_file)
     @path = path_to_file
 
-    # check_extension
-    from_xlsx
+    check_extension
   end
 
-  # https://rubyinrails.com/2014/02/02/ruby-get-file-extension-from-string-example/
+  def check_extension
+    if @path.include?("docs.google.com/spreadsheets")
+      # from_google_sheet
+    else
+      file_ext = File.extname(@path).split(".").last
+    end
 
-  #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  # def check_extension
-  #   if extension == 'xlsx'
-  #     from_xlsx
-  #   elsif extension == 'ods'
-  #     from_ods
-  #   else
-  #     from_xls
-  #   end
-  #
-  #   @path = "#{__dir__}/data/EngRus.#{extension}"
-  # end
+    case file_ext
+    when "xlsx"
+      from_xlsx
+    when "ods"
+      from_ods
+    when "xls"
+      from_xls
+    when "xml"
+      from_xml # TODO
+    when "json"
+      from_json # TODO
+    else
+      from_google_sheet
+    end
+  end
 
   def number_words
-    "Найдено слов: #{@num_rows - 1}"
+    "Найдено слов: #{@num_rows}"
   end
 
   private
 
+  def prepare_words(array)
+    array.each { |array| array.downcase! }
+    array.delete_at(FIRST_IN_ARRAY)
+  end
+
   def from_xlsx
     excel = Roo::Spreadsheet.open(@path)
-    worksheets = excel.sheets
 
     excel.each_with_pagename do |_name, sheet|
       @english = sheet.column(1)
-      @english.each { |english| english.downcase! }
-      @english.delete_at(HEADER_ROW)
-
-      # @english = InputInfo.new(sheet.column(1))
+      prepare_words(@english)
 
       @russian = sheet.column(2)
-      @russian.each { |russian| russian.downcase! }
-      @russian.delete_at(HEADER_ROW)
-
-      # @russian = InputInfo.new(sheet.column(2))
+      prepare_words(@russian)
     end
 
-    worksheets.each do |worksheet|
-      @num_rows = 0
-
-      excel.sheet(worksheet).each_row_streaming do |row|
-        row.map {|cell| cell.value}
-        @num_rows += 1
-
-        if row == []
-          @num_rows -=1
-          break
-        end
-      end
-    end
+    @num_rows = excel.last_row - HEADER_ROW
   end
 
   def from_ods
-    # TODO
-    #
-    # ods = Roo::OpenOffice.new(FILE_PATH, password: "") # stash for OpenOffice Support
-    # a = ods.column(1)                                  #
-    # b = ods.column(2)                                  #
-    # a.delete_at(HEADER_ROW)                            #
-    # b.delete_at(HEADER_ROW)                            #
+    ods = Roo::OpenOffice.new(@path, password: "")
+
+    ods.each_with_pagename do |_name, ods|
+      @english = ods.column(1)
+      prepare_words(@english)
+
+      @russian = ods.column(2)
+      prepare_words(@russian)
+    end
+
+    @num_rows = ods.last_row - HEADER_ROW
   end
 
   def from_xls
+    xls = Roo::Excel.new(@path)
+
+    xls.each_with_pagename do |_name, xls|
+      @english = xls.column(1)
+      prepare_words(@english)
+
+      @russian = xls.column(2)
+      prepare_words(@russian)
+    end
+
+    @num_rows = xls.last_row - HEADER_ROW
+  end
+
+  def from_google_sheet
     # TODO
-    #
-    # sheet = Roo::Excel.new('/Users/gturner/downloads/table.xls')
-    # stash for Excel-2003 Support
+    url = Roo::Google.new(@path)
+
+    url.each_with_pagename do |_name, url|
+      @english = url.column(1)
+      prepare_words(@english)
+
+      @russian = url.column(2)
+      prepare_words(@russian)
+    end
+  end
+
+  def from_xml
+    # TODO
+  end
+
+  def from_json
+    # TODO
   end
 end
