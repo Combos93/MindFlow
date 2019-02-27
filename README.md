@@ -41,10 +41,9 @@ ruby main.rb
 
 ##### TODO
 
-* parse by xml;
-* parse by json;
-* parse from Google Table;
-* parse from any db;
+* **Write the RSpec tests!**
+* **parse from any db** (an important task) => search of tables in db (maybe PG);
+* parse from Google Table (**new task**: include Google OauthAPI);
 * add keeping statistics (number of right answers and save to files(or db));
 * add Hard Mode :) .
 

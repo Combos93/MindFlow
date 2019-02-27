@@ -13,7 +13,7 @@ require_relative 'lib/conjecture'
 print "Найдены вот такие файлы с данными. \nКакой Вы хотите открыть?\n\n"
 
 data = Dir.glob("#{__dir__}/data/*").sort!
-data.push("Google Таблицы")
+# data.push("Google Таблицы")
 
 data.each.with_index(1) do |file_path, index|
   file_name = File.basename(file_path)
@@ -29,8 +29,6 @@ if data[choice].include?("Google Таблицы")
 else
   parser = Parser.new(data[choice])
 end
-
-
 
 english_words = parser.english
 russian_words = parser.russian
@@ -94,8 +92,17 @@ until update_brain.finished?
   puts update_brain.answer
 end
 
+persent_of_right_answers = ((update_brain.right.to_f / how_many_words.to_i).to_f) * 100
+
 if update_brain.right == how_many_words
   puts "Все ваши ответы - верны. \n\nСлов было загадано - #{how_many_words}."
+elsif update_brain.right == 0
+  puts "У вас #{update_brain.right}."
 else
-  puts "У вас #{update_brain.right} правильных ответов из #{how_many_words}"
+  puts "У вас #{Option.sklonenie(update_brain.right,
+                          "правильный ответ",
+                         "правильных ответа",
+                        "правильных ответов")} из #{how_many_words}; " \
+
+  "#{persent_of_right_answers.round(3)} % правильных ответов"
 end

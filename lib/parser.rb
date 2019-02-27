@@ -1,6 +1,6 @@
 require 'roo' # https://github.com/roo-rb/roo
 require 'roo-xls' # https://github.com/roo-rb/roo-xls
-require 'roo-google' # https://github.com/roo-rb/roo-google
+# require 'roo-google' # https://github.com/roo-rb/roo-google
 
 class Parser
   FIRST_IN_ARRAY = 0
@@ -28,10 +28,8 @@ class Parser
       from_ods
     when "xls"
       from_xls
-    when "xml"
-      from_xml # TODO
-    when "json"
-      from_json # TODO
+    when "db"
+      from_db
     else
       from_google_sheet
     end
@@ -103,11 +101,7 @@ class Parser
     end
   end
 
-  def from_xml
-    # TODO
-  end
-
-  def from_json
+  def from_db
     # TODO
   end
 end
