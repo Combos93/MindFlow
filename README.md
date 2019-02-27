@@ -4,11 +4,14 @@
 
 #### Установка
 1) Необходимая версия `>= Ruby 2.4`;
-2) Необходимо установить гемы `roo` и `roo-xls`;
+2) Скачиваем код
+3) Необходимо установить гем `bundler`;
 
 ```rb
-gem install roo && gem install roo-xls
+gem install bundler
 ```
+
+##### И выполнить команду `bundle install`, находясь в папке проекта. Необходимые гемы установятся сами.
 
 ##### На данный момент, есть возможность чтения и обработки, таких форматов, как:
 * xlsx;
@@ -17,13 +20,12 @@ gem install roo && gem install roo-xls
 
 
 #### Запуск программы
-1) Скачайте репозиторий;
-2) Открыть любой удобный для Вас формат файла `EngRus.*`, в папке `/data` и отредактировать под себя, а можно добавить 
+1) Открыть любой удобный для Вас формат файла `EngRus.*`, в папке `/data` и отредактировать под себя, а можно добавить 
 своих 
 слов. 
 Или заного переписать слова, но не трогать 1 строку(заголовки: `RUS, ENG`; они цветные);
-3) С помощью терминала, перейти в директорию самого репозитория;
-4) С помощью команды `ruby` запустить файл `main.rb.`
+2) С помощью терминала, перейти в директорию самого репозитория;
+3) С помощью команды `ruby` запустить файл `main.rb.`
 
 ```rb
 ruby main.rb
@@ -42,7 +44,7 @@ ruby main.rb
 ##### TODO
 
 * **Write the RSpec tests!**
-* **parse from any db** (an important task) => search of tables in db (maybe PG);
+* **parse from any db** (an important task) => search of tables in db (PG);
 * parse from Google Table (**new task**: include Google OauthAPI);
 * add keeping statistics (number of right answers and save to files(or db));
 * add Hard Mode :) .
