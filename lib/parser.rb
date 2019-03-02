@@ -28,8 +28,6 @@ class Parser
       from_ods
     when "xls"
       from_xls
-    when "db"
-      from_db
     else
       from_google_sheet
     end
@@ -99,9 +97,5 @@ class Parser
       @russian = url.column(2)
       prepare_words(@russian)
     end
-  end
-
-  def from_db
-    # TODO
   end
 end

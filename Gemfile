@@ -5,3 +5,4 @@ ruby '2.5.3'
 
 gem 'roo'
 gem 'roo-xls'
+gem 'sqlite3', '1.3.13'

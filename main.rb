@@ -9,6 +9,7 @@ end
 
 require_relative 'lib/parser'
 require_relative 'lib/conjecture'
+require_relative 'lib/database'
 
 print "Найдены вот такие файлы с данными. \nКакой Вы хотите открыть?\n\n"
 
@@ -26,14 +27,33 @@ if data[choice].include?("Google Таблицы")
   print "Пожалуйста, вставьте сюда url Вашей таблицы!\n\n"
   url = STDIN.gets.to_s
   parser = Parser.new(url)
+elsif data[choice].include?('db')
+  database = Database.new(data[choice])
+
+  puts 'Какую таблицу желаете открыть?'
+  database.result.each.with_index(1) do |table, index|
+    table = table.join('')
+    puts "#{index}) #{table}"
+  end
+
+  number_table = STDIN.gets.to_i - 1
+  database.parsing(database.result[number_table])
 else
   parser = Parser.new(data[choice])
 end
 
-english_words = parser.english
-russian_words = parser.russian
+if number_table == nil
+  english_words = parser.english
+  russian_words = parser.russian
 
-puts "#{parser.number_words}"
+  puts "#{parser.number_words}"
+else
+  english_words = database.eng_words
+  russian_words = database.rus_words
+
+  puts "#{database.count_rows}"
+end
+
 
 puts "Сколько слов повторяем?"
 how_many_words = STDIN.gets.chomp.to_i

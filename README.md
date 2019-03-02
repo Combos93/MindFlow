@@ -17,13 +17,14 @@ gem install bundler
 * xlsx;
 * xls;
 * ods;
+* DB Sqlite3
 
 
 #### Запуск программы
-1) Открыть любой удобный для Вас формат файла `EngRus.*`, в папке `/data` и отредактировать под себя, а можно добавить 
-своих 
-слов. 
-Или заного переписать слова, но не трогать 1 строку(заголовки: `RUS, ENG`; они цветные);
+1) Открыть любой удобный для Вас формат файла `EngRus.*`, в папке `/data` и отредактировать под себя, а можно 
+добавить 
+своих слов. Или заного переписать слова, но не трогать 1 строку(заголовки: `RUS, ENG`; они цветные);
+Редактировать базу данных можно с помощью программы **DB Browser for SQLite**
 2) С помощью терминала, перейти в директорию самого репозитория;
 3) С помощью команды `ruby` запустить файл `main.rb.`
 
@@ -44,7 +45,6 @@ ruby main.rb
 ##### TODO
 
 * **Write the RSpec tests!**
-* **parse from any db** (an important task) => search of tables in db (PG);
 * parse from Google Table (**new task**: include Google OauthAPI);
 * add keeping statistics (number of right answers and save to files(or db));
 * add Hard Mode :) .
