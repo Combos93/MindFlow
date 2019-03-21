@@ -10,6 +10,7 @@ end
 require_relative 'lib/parser'
 require_relative 'lib/conjecture'
 require_relative 'lib/database'
+require_relative 'lib/options'
 
 print "Найдены вот такие файлы с данными. \nКакой Вы хотите открыть?\n\n"
 
@@ -119,10 +120,8 @@ if update_brain.right == how_many_words
 elsif update_brain.right == 0
   puts "У вас #{update_brain.right}."
 else
-  puts "У вас #{Option.sklonenie(update_brain.right,
-                          "правильный ответ",
-                         "правильных ответа",
-                        "правильных ответов")} из #{how_many_words}; " \
-
-  "#{persent_of_right_answers.round(3)} % правильных ответов"
+  puts "У вас #{update_brain.right}#{Option.sklonenie(update_brain.right,
+                                 "правильный ответ",
+                                 "правильных ответа",
+                                 "правильных ответов")} из #{how_many_words}; #{persent_of_right_answers.round(3)} % правильных ответов"
 end
